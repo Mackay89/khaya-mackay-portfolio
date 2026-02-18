@@ -1,0 +1,1641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khaya Manoto | Software Developer & Security Engineer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Variables for consistent theming */
+        :root {
+            --primary-color: #6c63ff;
+            --secondary-color: #4d44db;
+            --cyber-color: #00d4aa;
+            --data-color: #ff6b6b;
+            --dark-bg: #0f0f23;
+            --darker-bg: #0a0a18;
+            --card-bg: #1a1a2e;
+            --light-text: #f0f0f0;
+            --medium-text: #b0b0c0;
+            --border-color: #2a2a3e;
+            --success-color: #4ade80;
+            --warning-color: #fbbf24;
+            --error-color: #f87171;
+            --shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            --transition: all 0.3s ease;
+        }
+
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4 {
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, var(--primary-color), var(--cyber-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 1rem;
+            color: var(--light-text);
+        }
+
+        h3 {
+            font-size: clamp(1.3rem, 3vw, 1.8rem);
+            margin-bottom: 0.75rem;
+        }
+
+        p {
+            color: var(--medium-text);
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Header & Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: rgba(10, 10, 24, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 0;
+            transition: var(--transition);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--light-text);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: var(--transition);
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--light-text);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 150px 0 100px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(108, 99, 255, 0.1) 0%, rgba(108, 99, 255, 0) 70%);
+            z-index: -1;
+        }
+
+        .hero-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 4rem;
+        }
+
+        .hero-text {
+            flex: 1;
+        }
+
+        .hero-image {
+            flex: 0 0 350px;
+        }
+
+        .tagline {
+            display: inline-block;
+            background-color: rgba(108, 99, 255, 0.1);
+            color: var(--primary-color);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(108, 99, 255, 0.3);
+        }
+
+        .profile-img-container {
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 5px solid var(--primary-color);
+            box-shadow: var(--shadow);
+            position: relative;
+            background: linear-gradient(45deg, var(--primary-color), var(--cyber-color));
+        }
+
+        .profile-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .profile-img:hover {
+            transform: scale(1.05);
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1rem;
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(108, 99, 255, 0.2);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(108, 99, 255, 0.1);
+        }
+
+        /* Skills Section */
+        .skills-section {
+            padding: 100px 0;
+            background-color: var(--darker-bg);
+        }
+
+        .skills-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .skills-header p {
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-category {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-category:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow);
+        }
+
+        .skill-category h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .skill-tag {
+            background-color: rgba(108, 99, 255, 0.1);
+            color: var(--primary-color);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 1px solid rgba(108, 99, 255, 0.3);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .skill-tag:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(108, 99, 255, 0.2);
+        }
+
+        .skill-tag.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Demo Section for Skills */
+        .skill-demo {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            display: none;
+        }
+
+        .skill-demo.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .demo-content {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .demo-code {
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 6px;
+            padding: 1rem;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.9rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+
+        .demo-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        /* Courses Section */
+        .courses-section {
+            padding: 100px 0;
+        }
+
+        .courses-section > .container {
+            text-align: center;
+        }
+
+        .courses-section p {
+            max-width: 700px;
+            margin: 0 auto 3rem;
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .course-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 2.5rem 2rem;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .course-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background-color: var(--primary-color);
+        }
+
+        .course-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow);
+        }
+
+        .course-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .course-list {
+            list-style: none;
+            margin-top: 1.5rem;
+        }
+
+        .course-list li {
+            padding: 8px 0;
+            color: var(--medium-text);
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .course-list li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        /* Projects Section */
+        .projects-section {
+            padding: 100px 0;
+            background-color: var(--darker-bg);
+        }
+
+        .projects-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        .projects-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow);
+        }
+
+        .project-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .project-content {
+            padding: 1.5rem;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 1rem 0;
+        }
+
+        .project-tech span {
+            background-color: rgba(0, 212, 170, 0.1);
+            color: var(--cyber-color);
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .project-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+        }
+
+        .project-actions .btn {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            padding: 100px 0;
+        }
+
+        .contact-section > .container {
+            text-align: center;
+        }
+
+        .contact-section p {
+            max-width: 700px;
+            margin: 0 auto 3rem;
+        }
+
+        .contact-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            text-align: left;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .contact-item {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(108, 99, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .contact-form {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--light-text);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--light-text);
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
+        }
+
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--darker-bg);
+            padding: 60px 0 30px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            color: var(--light-text);
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+
+        .social-link:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--medium-text);
+            font-size: 0.9rem;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            border: 1px solid var(--border-color);
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--light-text);
+            font-size: 2rem;
+            cursor: pointer;
+            z-index: 10;
+            transition: var(--transition);
+        }
+
+        .close-modal:hover {
+            color: var(--primary-color);
+        }
+
+        .modal-body {
+            padding: 3rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .hero-image {
+                order: -1;
+                margin-bottom: 2rem;
+            }
+            
+            .profile-img-container {
+                width: 300px;
+                height: 300px;
+                margin: 0 auto;
+            }
+            
+            .hero-btns {
+                justify-content: center;
+            }
+            
+            .projects-header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background-color: var(--darker-bg);
+                flex-direction: column;
+                align-items: center;
+                padding: 2rem;
+                gap: 1.5rem;
+                transform: translateY(-100%);
+                opacity: 0;
+                visibility: hidden;
+                transition: var(--transition);
+                border-bottom: 1px solid var(--border-color);
+                z-index: 999;
+            }
+            
+            .nav-links.active {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .courses-grid,
+            .skills-container,
+            .projects-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 2rem;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero-btns {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .modal-body {
+                padding: 2rem 1.5rem;
+            }
+            
+            .profile-img-container {
+                width: 250px;
+                height: 250px;
+            }
+        }
+    </style>
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="#" class="logo">KhayaManoto</a>
+                
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#skills">Skills</a></li>
+                    <li><a href="#courses">Courses</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+                
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <span class="tagline">Software Developer & Security Engineer</span>
+                    <h1>Khaya Manoto</h1>
+                    <p>Passionate software developer specializing in secure, scalable applications. Expert in full-stack development with cybersecurity integration. Currently enhancing skills in Data Engineering, Analytics, and advanced Python development.</p>
+                    <div class="hero-btns">
+                        <a href="#projects" class="btn">
+                            <i class="fas fa-code"></i> View Projects
+                        </a>
+                        <a href="#contact" class="btn btn-outline">
+                            <i class="fas fa-paper-plane"></i> Get In Touch
+                        </a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <div class="profile-img-container">
+                        <img
+                            src="https://drive.google.com/uc?export=view&id=1Dya5lRwIIXL6NlcLrwdL0n5aVQwVSRi-"
+                            alt="Khaya Manoto - Software Developer & Security Engineer"
+                            class="profile-img"
+                            onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzg0IiBoZWlnaHQ9IjM4NCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiMyNTYzZWIiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiMwZTlhNWU5Ii8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PGNpcmNsZSBjeD0iMTkyIiBjeT0iMTkyIiByPSIxODAiIGZpbGw9InVybCgjZykiLz48dGV4dCB4PSIxOTIiIHk9IjIwMCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjQ4IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC13ZWlnaHQ9ImJvbGQiPktNPC90ZXh0Pjwvc3ZnPg=='"
+                        >
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="skills-section" id="skills">
+        <div class="container">
+            <div class="skills-header">
+                <h2>Technical Expertise</h2>
+                <p>Comprehensive skill set across full-stack development and specialized domains</p>
+            </div>
+            
+            <div class="skills-container">
+                <div class="skill-category">
+                    <h3><i class="fab fa-python" style="color: var(--primary-color);"></i> Python & Data Engineering</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag" data-skill="python">Python 3</span>
+                        <span class="skill-tag" data-skill="pandas">Pandas</span>
+                        <span class="skill-tag" data-skill="numpy">NumPy</span>
+                        <span class="skill-tag" data-skill="pyspark">PySpark</span>
+                        <span class="skill-tag" data-skill="etl">ETL Pipelines</span>
+                        <span class="skill-tag" data-skill="data-warehouse">Data Warehousing</span>
+                        <span class="skill-tag" data-skill="airflow">Apache Airflow</span>
+                        <span class="skill-tag" data-skill="sql">SQL/NoSQL</span>
+                    </div>
+                    <div class="skill-demo" id="python-demo">
+                        <h4>Python Data Processing Example</h4>
+                        <div class="demo-content">
+                            <p>This Python script demonstrates data cleaning and transformation using Pandas:</p>
+                            <div class="demo-code">
+                                import pandas as pd<br>
+                                import numpy as np<br><br>
+                                
+                                # Load data<br>
+                                data = pd.read_csv('sales_data.csv')<br><br>
+                                
+                                # Clean and transform<br>
+                                data['date'] = pd.to_datetime(data['date'])<br>
+                                data['revenue'] = data['quantity'] * data['price']<br>
+                                data.fillna(0, inplace=True)<br><br>
+                                
+                                # Aggregate by month<br>
+                                monthly_sales = data.groupby(pd.Grouper(key='date', freq='M'))['revenue'].sum()<br><br>
+                                
+                                print(monthly_sales.head())
+                            </div>
+                            <div class="demo-actions">
+                                <button class="btn btn-sm run-demo-btn" data-code="python">
+                                    <i class="fas fa-play"></i> Run Demo
+                                </button>
+                                <button class="btn btn-outline btn-sm">
+                                    <i class="fab fa-github"></i> View Full Code
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="skill-category">
+                    <h3><i class="fas fa-shield-alt" style="color: var(--cyber-color);"></i> Cybersecurity</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag" data-skill="network">Network Security</span>
+                        <span class="skill-tag" data-skill="crypto">Cryptography</span>
+                        <span class="skill-tag" data-skill="pentest">Penetration Testing</span>
+                        <span class="skill-tag" data-skill="audit">Security Auditing</span>
+                        <span class="skill-tag" data-skill="owasp">OWASP Top 10</span>
+                        <span class="skill-tag" data-skill="sdlc">Secure SDLC</span>
+                        <span class="skill-tag" data-skill="incident">Incident Response</span>
+                        <span class="skill-tag" data-skill="risk">Risk Assessment</span>
+                    </div>
+                    <div class="skill-demo" id="security-demo">
+                        <h4>Security Hash Implementation</h4>
+                        <div class="demo-content">
+                            <p>Secure password hashing using bcrypt in Python:</p>
+                            <div class="demo-code">
+                                import bcrypt<br>
+                                import hashlib<br><br>
+                                
+                                def hash_password(password):<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;# Generate salt<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;salt = bcrypt.gensalt()<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;# Hash password<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;hashed = bcrypt.hashpw(password.encode(), salt)<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;return hashed<br><br>
+                                
+                                def verify_password(password, hashed):<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;return bcrypt.checkpw(password.encode(), hashed)<br><br>
+                                
+                                # Example usage<br>
+                                password = "SecurePass123!"<br>
+                                hashed = hash_password(password)<br>
+                                print(f"Stored hash: {hashed}")<br>
+                                print(f"Verification: {verify_password(password, hashed)}")
+                            </div>
+                            <div class="demo-actions">
+                                <button class="btn btn-sm run-demo-btn" data-code="security">
+                                    <i class="fas fa-shield-alt"></i> Test Security
+                                </button>
+                                <button class="btn btn-outline btn-sm">
+                                    <i class="fas fa-lock"></i> View Security Guidelines
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="skill-category">
+                    <h3><i class="fas fa-chart-bar" style="color: var(--data-color);"></i> Data Analytics</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag" data-skill="viz">Data Visualization</span>
+                        <span class="skill-tag" data-skill="stats">Statistical Analysis</span>
+                        <span class="skill-tag" data-skill="powerbi">Power BI</span>
+                        <span class="skill-tag" data-skill="tableau">Tableau</span>
+                        <span class="skill-tag" data-skill="ml">Machine Learning</span>
+                        <span class="skill-tag" data-skill="predictive">Predictive Modeling</span>
+                        <span class="skill-tag" data-skill="ab">A/B Testing</span>
+                        <span class="skill-tag" data-skill="bi">Business Intelligence</span>
+                    </div>
+                    <div class="skill-demo" id="analytics-demo">
+                        <h4>Data Visualization Example</h4>
+                        <div class="demo-content">
+                            <p>Creating interactive charts with Plotly for data insights:</p>
+                            <div class="demo-code">
+                                import plotly.express as px<br>
+                                import plotly.graph_objects as go<br><br>
+                                
+                                # Sample data<br>
+                                data = pd.DataFrame({<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;'Month': ['Jan', 'Feb', 'Mar', 'Apr', 'May'],<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;'Sales': [12000, 15000, 18000, 22000, 25000],<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;'Expenses': [8000, 9000, 10000, 12000, 14000]<br>
+                                })<br><br>
+                                
+                                # Create interactive chart<br>
+                                fig = go.Figure()<br>
+                                fig.add_trace(go.Bar(x=data['Month'], y=data['Sales'], name='Sales'))<br>
+                                fig.add_trace(go.Bar(x=data['Month'], y=data['Expenses'], name='Expenses'))<br>
+                                fig.update_layout(title='Monthly Sales & Expenses', barmode='group')<br>
+                                fig.show()
+                            </div>
+                            <div class="demo-actions">
+                                <button class="btn btn-sm run-demo-btn" data-code="viz">
+                                    <i class="fas fa-chart-line"></i> Visualize Data
+                                </button>
+                                <button class="btn btn-outline btn-sm">
+                                    <i class="fas fa-download"></i> Download Dataset
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="skill-category">
+                    <h3><i class="fas fa-code" style="color: #e94e77;"></i> Full Stack Development</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag" data-skill="react">React.js</span>
+                        <span class="skill-tag" data-skill="node">Node.js</span>
+                        <span class="skill-tag" data-skill="typescript">TypeScript</span>
+                        <span class="skill-tag" data-skill="django">Django</span>
+                        <span class="skill-tag" data-skill="api">RESTful APIs</span>
+                        <span class="skill-tag" data-skill="docker">Docker</span>
+                        <span class="skill-tag" data-skill="kubernetes">Kubernetes</span>
+                        <span class="skill-tag" data-skill="aws">AWS/GCP</span>
+                    </div>
+                    <div class="skill-demo" id="fullstack-demo">
+                        <h4>REST API Implementation</h4>
+                        <div class="demo-content">
+                            <p>Building a secure REST API with Node.js and Express:</p>
+                            <div class="demo-code">
+                                const express = require('express');<br>
+                                const jwt = require('jsonwebtoken');<br>
+                                const app = express();<br><br>
+                                
+                                // Middleware<br>
+                                app.use(express.json());<br><br>
+                                
+                                // Authentication middleware<br>
+                                const authenticate = (req, res, next) => {<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;const token = req.header('Authorization');<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;if (!token) return res.status(401).send('Access denied');<br><br>
+                                
+                                &nbsp;&nbsp;&nbsp;&nbsp;try {<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const verified = jwt.verify(token, process.env.JWT_SECRET);<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;req.user = verified;<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;next();<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;} catch (err) {<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;res.status(400).send('Invalid token');<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                                };<br><br>
+                                
+                                // Protected route<br>
+                                app.get('/api/users', authenticate, (req, res) => {<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;res.json({ message: 'Protected data accessed' });<br>
+                                });
+                            </div>
+                            <div class="demo-actions">
+                                <button class="btn btn-sm run-demo-btn" data-code="api">
+                                    <i class="fas fa-bolt"></i> Test API
+                                </button>
+                                <button class="btn btn-outline btn-sm">
+                                    <i class="fas fa-code-branch"></i> View Documentation
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Courses Section -->
+    <section class="courses-section" id="courses">
+        <div class="container">
+            <h2>Specialized Courses & Certifications</h2>
+            <p>Continuous learning in emerging technologies and methodologies</p>
+            
+            <div class="courses-grid">
+                <div class="course-card">
+                    <div class="course-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Cybersecurity Fundamentals</h3>
+                    <p>Comprehensive training in network security, ethical hacking, vulnerability assessment, and security best practices for modern applications.</p>
+                    <ul class="course-list">
+                        <li>Network & Application Security</li>
+                        <li>Penetration Testing Techniques</li>
+                        <li>Security Compliance Standards</li>
+                        <li>Incident Response Protocols</li>
+                    </ul>
+                </div>
+                
+                <div class="course-card">
+                    <div class="course-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h3>Data Engineering & Analytics</h3>
+                    <p>Advanced data pipeline development, ETL processes, data warehousing, and analytical modeling for business intelligence solutions.</p>
+                    <ul class="course-list">
+                        <li>Big Data Processing</li>
+                        <li>Data Pipeline Architecture</li>
+                        <li>Business Intelligence Tools</li>
+                        <li>Predictive Analytics</li>
+                    </ul>
+                </div>
+                
+                <div class="course-card">
+                    <div class="course-icon">
+                        <i class="fab fa-python"></i>
+                    </div>
+                    <h3>Advanced Python Development</h3>
+                    <p>Mastery in Python programming for web development, data science, automation, and scalable application architecture.</p>
+                    <ul class="course-list">
+                        <li>Web Frameworks (Django/Flask)</li>
+                        <li>Data Science Libraries</li>
+                        <li>Automation Scripting</li>
+                        <li>Performance Optimization</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="projects-section" id="projects">
+        <div class="container">
+            <div class="projects-header">
+                <div>
+                    <h2>Project Portfolio</h2>
+                    <p>Showcase of recent development work and implementations</p>
+                </div>
+                <button class="btn" id="addProjectBtn">
+                    <i class="fas fa-plus"></i> Add Project
+                </button>
+            </div>
+            
+            <div class="projects-container" id="projectsContainer">
+                <!-- Projects will be dynamically loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section" id="contact">
+        <div class="container">
+            <h2>Let's Connect</h2>
+            <p>Interested in collaboration or have an opportunity? Get in touch!</p>
+            
+            <div class="contact-container">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div>
+                            <h3>Professional Email</h3>
+                            <p>kmmanoto@gmail.com</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fab fa-linkedin"></i>
+                        </div>
+                        <div>
+                            <h3>LinkedIn</h3>
+                            <p>Connect for professional inquiries</p>
+                            <a href="https://www.linkedin.com/in/khaya-manoto/" target="_blank" style="color: var(--primary-color); text-decoration: none;">linkedin.com/in/khaya-manoto</a>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fab fa-github"></i>
+                        </div>
+                        <div>
+                            <h3>GitHub</h3>
+                            <p>View my code repositories</p>
+                            <a href="https://github.com/Mackay89" target="_blank" style="color: var(--primary-color); text-decoration: none;">github.com/Mackay89</a>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div>
+                            <h3>Location</h3>
+                            <p>Johannesburg, South Africa</p>
+                            <p>Open to remote opportunities</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contact-form">
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Your Message</label>
+                            <textarea id="message" class="form-control" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn">
+                            <i class="fas fa-paper-plane"></i> Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="logo" style="color: white; font-size: clamp(1.6rem, 3vw, 2rem);">KhayaManoto</div>
+                
+                <div class="social-links">
+                    <a href="https://www.linkedin.com/in/khaya-manoto/" target="_blank" class="social-link">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://github.com/Mackay89" target="_blank" class="social-link">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="mailto:kmmanoto@gmail.com" class="social-link">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                    <a href="https://drive.google.com/file/d/1Dya5lRwIIXL6NlcLrwdL0n5aVQwVSRi-/view?usp=sharing" target="_blank" class="social-link">
+                        <i class="fas fa-file-pdf"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; <span id="currentYear"></span> Khaya Manoto. Software Developer & Security Engineer. All rights reserved.</p>
+                <p style="margin-top: 10px;">Built with modern web technologies and security best practices.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <div class="modal" id="projectModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeModal">&times;</button>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <div class="modal" id="addProjectModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeAddModal">&times;</button>
+            <div class="modal-body">
+                <h2>Add New Project</h2>
+                <form id="addProjectForm">
+                    <div class="form-group">
+                        <label for="projectTitle">Project Title</label>
+                        <input type="text" id="projectTitle" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="projectDesc">Description</label>
+                        <textarea id="projectDesc" class="form-control" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="projectTech">Technologies (comma separated)</label>
+                        <input type="text" id="projectTech" class="form-control" required placeholder="React, Node.js, Python, Docker">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="projectDemo">Demo URL (optional)</label>
+                        <input type="url" id="projectDemo" class="form-control" placeholder="https://example.com/demo">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="projectGithub">GitHub URL (optional)</label>
+                        <input type="url" id="projectGithub" class="form-control" placeholder="https://github.com/username/project">
+                    </div>
+                    
+                    <button type="submit" class="btn" style="margin-top: 20px;">
+                        <i class="fas fa-plus"></i> Add Project
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current year in footer
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            // Mobile menu toggle
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navLinks = document.querySelector('.nav-links');
+            
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                    this.querySelector('i').classList.toggle('fa-bars');
+                    this.querySelector('i').classList.toggle('fa-times');
+                });
+            }
+            
+            // Close mobile menu when clicking a link
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                    if (mobileMenuBtn.querySelector('i')) {
+                        mobileMenuBtn.querySelector('i').classList.remove('fa-times');
+                        mobileMenuBtn.querySelector('i').classList.add('fa-bars');
+                    }
+                });
+            });
+            
+            // Skills demo functionality
+            const skillTags = document.querySelectorAll('.skill-tag');
+            let activeDemo = null;
+            
+            skillTags.forEach(tag => {
+                tag.addEventListener('click', function() {
+                    // Remove active class from all tags
+                    skillTags.forEach(t => t.classList.remove('active'));
+                    
+                    // Add active class to clicked tag
+                    this.classList.add('active');
+                    
+                    // Get the skill category
+                    const category = this.closest('.skill-category');
+                    const demoSection = category.querySelector('.skill-demo');
+                    
+                    // Close any open demos
+                    if (activeDemo && activeDemo !== demoSection) {
+                        activeDemo.classList.remove('active');
+                    }
+                    
+                    // Toggle current demo
+                    demoSection.classList.toggle('active');
+                    activeDemo = demoSection.classList.contains('active') ? demoSection : null;
+                });
+            });
+            
+            // Run demo buttons
+            document.querySelectorAll('.run-demo-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const demoType = this.getAttribute('data-code');
+                    let demoOutput = '';
+                    
+                    switch(demoType) {
+                        case 'python':
+                            demoOutput = 'Output: Monthly sales data processed successfully!\nJan: $12,000\nFeb: $15,000\nMar: $18,000\nApr: $22,000\nMay: $25,000';
+                            break;
+                        case 'security':
+                            demoOutput = 'Security Demo Output:\nPassword hashed successfully!\nHash verification: PASSED ✓\nSecurity test completed without issues.';
+                            break;
+                        case 'viz':
+                            demoOutput = 'Visualization generated successfully!\nInteractive chart created with Plotly.\nClick to view detailed analytics dashboard.';
+                            break;
+                        case 'api':
+                            demoOutput = 'API Test Results:\n✓ Authentication middleware working\n✓ JWT token validation successful\n✓ Protected route accessed: Status 200 OK';
+                            break;
+                    }
+                    
+                    alert(`Demo Output:\n\n${demoOutput}\n\nNote: This is a simulated demo. In a real environment, this would execute the actual code.`);
+                });
+            });
+            
+            // Project data
+            const projects = [
+                {
+                    id: 1,
+                    title: "Secure E-Commerce Platform",
+                    description: "A full-stack e-commerce solution with integrated security features, including encryption, secure payment processing, and vulnerability scanning.",
+                    technologies: ["React", "Node.js", "Express", "MongoDB", "JWT", "Stripe API"],
+                    image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                    demo: "https://secure-ecommerce-demo.example.com",
+                    github: "https://github.com/Mackay89/secure-ecommerce"
+                },
+                {
+                    id: 2,
+                    title: "Data Pipeline for IoT Analytics",
+                    description: "A scalable data pipeline that processes IoT device data in real-time, with analytics dashboard for monitoring and predictive maintenance.",
+                    technologies: ["Python", "Apache Kafka", "PySpark", "Airflow", "Docker", "AWS"],
+                    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                    demo: "https://iot-analytics-demo.example.com",
+                    github: "https://github.com/Mackay89/iot-data-pipeline"
+                },
+                {
+                    id: 3,
+                    title: "Cybersecurity Dashboard",
+                    description: "A comprehensive dashboard for monitoring security threats, visualizing network traffic, and managing incident response workflows.",
+                    technologies: ["Vue.js", "Python", "D3.js", "REST API", "SQL", "Cybersecurity Tools"],
+                    image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                    demo: "https://cybersecurity-dashboard.example.com",
+                    github: "https://github.com/Mackay89/cybersecurity-dashboard"
+                },
+                {
+                    id: 4,
+                    title: "Machine Learning Fraud Detection",
+                    description: "A machine learning system that analyzes transaction patterns to detect fraudulent activities in real-time with 99.2% accuracy.",
+                    technologies: ["Python", "TensorFlow", "Scikit-learn", "Flask", "PostgreSQL", "Docker"],
+                    image: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                    demo: "https://fraud-detection-demo.example.com",
+                    github: "https://github.com/Mackay89/fraud-detection-ml"
+                }
+            ];
+            
+            // DOM elements
+            const projectsContainer = document.getElementById('projectsContainer');
+            const addProjectBtn = document.getElementById('addProjectBtn');
+            const projectModal = document.getElementById('projectModal');
+            const addProjectModal = document.getElementById('addProjectModal');
+            const closeModalBtn = document.getElementById('closeModal');
+            const closeAddModalBtn = document.getElementById('closeAddModal');
+            const contactForm = document.getElementById('contactForm');
+            const addProjectForm = document.getElementById('addProjectForm');
+            
+            // Load projects on page load
+            function loadProjects() {
+                projectsContainer.innerHTML = '';
+                
+                projects.forEach(project => {
+                    const projectCard = document.createElement('div');
+                    projectCard.className = 'project-card';
+                    projectCard.innerHTML = `
+                        <img src="${project.image}" alt="${project.title}" class="project-img">
+                        <div class="project-content">
+                            <h3>${project.title}</h3>
+                            <p>${project.description}</p>
+                            <div class="project-tech">
+                                ${project.technologies.map(tech => `<span>${tech}</span>`).join('')}
+                            </div>
+                            <div class="project-actions">
+                                <button class="btn view-project-btn" data-id="${project.id}">
+                                    <i class="fas fa-eye"></i> View Details
+                                </button>
+                                <div>
+                                    ${project.demo ? `<a href="${project.demo}" target="_blank" class="btn btn-outline" style="margin-right: 10px;"><i class="fas fa-external-link-alt"></i> Demo</a>` : ''}
+                                    ${project.github ? `<a href="${project.github}" target="_blank" class="btn btn-outline"><i class="fab fa-github"></i> Code</a>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    projectsContainer.appendChild(projectCard);
+                });
+                
+                // Add event listeners to view project buttons
+                document.querySelectorAll('.view-project-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const projectId = parseInt(this.getAttribute('data-id'));
+                        openProjectModal(projectId);
+                    });
+                });
+            }
+            
+            // Open project modal with details
+            function openProjectModal(projectId) {
+                const project = projects.find(p => p.id === projectId);
+                if (!project) return;
+                
+                const modalContent = document.getElementById('modalContent');
+                modalContent.innerHTML = `
+                    <div class="modal-body">
+                        <h2>${project.title}</h2>
+                        <img src="${project.image}" alt="${project.title}" style="width:100%; height:300px; object-fit:cover; border-radius:8px; margin:1.5rem 0;">
+                        <p>${project.description}</p>
+                        <h3>Technologies Used</h3>
+                        <div class="skill-tags" style="margin:1.5rem 0;">
+                            ${project.technologies.map(tech => `<span class="skill-tag">${tech}</span>`).join('')}
+                        </div>
+                        <h3>Key Features</h3>
+                        <ul class="course-list">
+                            <li>Secure user authentication and authorization</li>
+                            <li>Real-time data processing and analytics</li>
+                            <li>Responsive design for all devices</li>
+                            <li>Integration with third-party APIs</li>
+                            <li>Scalable architecture with containerization</li>
+                            <li>Comprehensive security implementation</li>
+                        </ul>
+                        <div style="display:flex; gap:1rem; margin-top:2rem;">
+                            ${project.demo ? `<a href="${project.demo}" target="_blank" class="btn"><i class="fas fa-external-link-alt"></i> Live Demo</a>` : ''}
+                            ${project.github ? `<a href="${project.github}" target="_blank" class="btn btn-outline"><i class="fab fa-github"></i> Source Code</a>` : ''}
+                        </div>
+                    </div>
+                `;
+                
+                projectModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+            
+            // Close modal
+            function closeModal(modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+            
+            // Event listeners for modals
+            if (closeModalBtn) {
+                closeModalBtn.addEventListener('click', () => closeModal(projectModal));
+            }
+            
+            if (closeAddModalBtn) {
+                closeAddModalBtn.addEventListener('click', () => closeModal(addProjectModal));
+            }
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', (e) => {
+                if (e.target === projectModal) closeModal(projectModal);
+                if (e.target === addProjectModal) closeModal(addProjectModal);
+            });
+            
+            // Add project button
+            if (addProjectBtn) {
+                addProjectBtn.addEventListener('click', () => {
+                    addProjectModal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                });
+            }
+            
+            // Contact form submission
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Get form values
+                    const name = document.getElementById('name').value;
+                    const email = document.getElementById('email').value;
+                    const subject = document.getElementById('subject').value;
+                    const message = document.getElementById('message').value;
+                    
+                    // In a real app, you would send this data to a server
+                    // For demo purposes, we'll just show an alert
+                    alert(`Thank you for your message, ${name}! I'll get back to you soon at ${email}.`);
+                    
+                    // Reset form
+                    contactForm.reset();
+                });
+            }
+            
+            // Add project form submission
+            if (addProjectForm) {
+                addProjectForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Get form values
+                    const title = document.getElementById('projectTitle').value;
+                    const description = document.getElementById('projectDesc').value;
+                    const technologies = document.getElementById('projectTech').value.split(',').map(tech => tech.trim());
+                    const demo = document.getElementById('projectDemo').value;
+                    const github = document.getElementById('projectGithub').value;
+                    
+                    // Create new project object
+                    const newProject = {
+                        id: projects.length + 1,
+                        title: title,
+                        description: description,
+                        technologies: technologies,
+                        image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                        demo: demo || null,
+                        github: github || null
+                    };
+                    
+                    // Add to projects array
+                    projects.push(newProject);
+                    
+                    // Reload projects
+                    loadProjects();
+                    
+                    // Close modal
+                    closeModal(addProjectModal);
+                    
+                    // Reset form
+                    addProjectForm.reset();
+                    
+                    // Show success message
+                    alert('Project added successfully!');
+                });
+            }
+            
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        const headerHeight = document.querySelector('header').offsetHeight;
+                        const targetPosition = targetElement.offsetTop - headerHeight;
+                        
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Initialize projects on load
+            loadProjects();
+            
+            // Add scroll effect to header
+            window.addEventListener('scroll', function() {
+                const header = document.querySelector('header');
+                if (window.scrollY > 100) {
+                    header.style.padding = '10px 0';
+                    header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.2)';
+                } else {
+                    header.style.padding = '15px 0';
+                    header.style.boxShadow = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
