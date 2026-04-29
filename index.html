@@ -283,6 +283,63 @@
         .confirm-box p { font-size: 1rem; margin-bottom: 1.5rem; }
         .confirm-actions { display: flex; gap: 1rem; justify-content: center; }
 
+        /* ── ADMIN LOGIN PANEL ── */
+        .admin-lock-btn {
+            position: fixed; bottom: 24px; left: 24px; z-index: 4000;
+            background: rgba(10,10,24,0.85); border: 1px solid var(--border-color);
+            color: var(--medium-text); padding: 8px 14px; border-radius: 8px;
+            cursor: pointer; font-size: 0.78rem; font-weight: 500;
+            display: flex; align-items: center; gap: 6px;
+            transition: var(--transition); backdrop-filter: blur(6px);
+        }
+        .admin-lock-btn:hover { border-color: var(--primary-color); color: var(--primary-color); }
+
+        .admin-login-overlay {
+            display: none; position: fixed; inset: 0; z-index: 6000;
+            background: rgba(0,0,0,0.92); backdrop-filter: blur(8px);
+            align-items: center; justify-content: center;
+        }
+        .admin-login-overlay.active { display: flex; }
+
+        .admin-login-box {
+            background: var(--card-bg); border: 1px solid var(--primary-color);
+            border-radius: 16px; padding: 2.5rem; max-width: 380px; width: 100%;
+            text-align: center; animation: modalFadeIn 0.3s ease;
+            box-shadow: 0 0 60px rgba(108,99,255,0.2);
+        }
+        .admin-login-box .lock-icon {
+            font-size: 2.5rem; color: var(--primary-color); margin-bottom: 1rem;
+        }
+        .admin-login-box h3 {
+            font-family: 'Space Mono', monospace; font-size: 1.2rem;
+            color: var(--light-text); margin-bottom: 0.5rem;
+        }
+        .admin-login-box p { font-size: 0.9rem; margin-bottom: 1.5rem; }
+
+        .admin-pin-input {
+            width: 100%; padding: 14px; text-align: center;
+            background: rgba(255,255,255,0.05); border: 2px solid var(--border-color);
+            border-radius: 10px; color: var(--light-text);
+            font-family: 'Space Mono', monospace; font-size: 1.4rem;
+            letter-spacing: 6px; transition: var(--transition);
+            margin-bottom: 1rem;
+        }
+        .admin-pin-input:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(108,99,255,0.2); }
+        .admin-pin-input.error { border-color: var(--error-color); animation: shake 0.4s ease; }
+
+        @keyframes shake {
+            0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-5px)} 80%{transform:translateX(5px)}
+        }
+
+        .admin-login-actions { display: flex; gap: 10px; margin-top: 0.5rem; }
+        .admin-error-msg { color: var(--error-color); font-size: 0.85rem; margin-top: 0.5rem; min-height: 20px; }
+
+        /* Hide all edit controls from visitors */
+        .admin-only { display: none !important; }
+        body.admin-mode .admin-only { display: flex !important; }
+        body.admin-mode #addProjectBtn { display: inline-flex !important; }
+        #addProjectBtn { display: none !important; }
+
         /* ── TOAST NOTIFICATION ── */
         .toast {
             position: fixed; bottom: 30px; right: 30px; z-index: 9999;
@@ -337,11 +394,43 @@
 <!-- Toast -->
 <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg">Saved!</span></div>
 
-<!-- Edit Mode Bar -->
-<div class="edit-mode-bar" id="editModeBar">
+<!-- Edit Mode Bar (admin only) -->
+<div class="edit-mode-bar admin-only" id="editModeBar" style="display:none !important;">
     <i class="fas fa-edit"></i> Edit Mode Active — Click any text to edit it
     <button onclick="saveEdits()"><i class="fas fa-save"></i> Save Changes</button>
     <button class="cancel-btn" onclick="cancelEdits()"><i class="fas fa-times"></i> Cancel</button>
+</div>
+<div class="edit-mode-bar" id="editModeBarAdmin" style="display:none;">
+    <i class="fas fa-edit"></i> Edit Mode Active — Click any text to edit it
+    <button onclick="saveEdits()"><i class="fas fa-save"></i> Save Changes</button>
+    <button class="cancel-btn" onclick="cancelEdits()"><i class="fas fa-times"></i> Cancel</button>
+</div>
+
+<!-- Admin Lock Button (subtle, bottom-left) -->
+<button class="admin-lock-btn" id="adminLockBtn" onclick="openAdminLogin()">
+    <i class="fas fa-lock" id="adminLockIcon"></i>
+    <span id="adminLockLabel">Admin</span>
+</button>
+
+<!-- Admin Login Overlay -->
+<div class="admin-login-overlay" id="adminLoginOverlay">
+    <div class="admin-login-box">
+        <div class="lock-icon"><i class="fas fa-shield-alt"></i></div>
+        <h3>Admin Access</h3>
+        <p>Enter your password to unlock editing</p>
+        <input type="password" class="admin-pin-input" id="adminPasswordInput"
+               placeholder="••••••••" maxlength="32"
+               onkeydown="if(event.key==='Enter') attemptAdminLogin()">
+        <div class="admin-error-msg" id="adminErrorMsg"></div>
+        <div class="admin-login-actions">
+            <button class="btn" onclick="attemptAdminLogin()" style="flex:1;">
+                <i class="fas fa-unlock"></i> Unlock
+            </button>
+            <button class="btn btn-outline" onclick="closeAdminLogin()" style="flex:1;">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+        </div>
+    </div>
 </div>
 
 <!-- Header -->
@@ -361,8 +450,8 @@
     </div>
 </header>
 
-<!-- Edit Hero Button -->
-<button class="edit-hero-btn" id="editHeroBtn" onclick="toggleEditMode()">
+<!-- Edit Hero Button (admin only) -->
+<button class="edit-hero-btn admin-only" id="editHeroBtn" onclick="toggleEditMode()" style="display:none !important;">
     <i class="fas fa-pen"></i> Edit Bio
 </button>
 
@@ -595,7 +684,7 @@
             <div class="social-links">
                 <a href="https://www.linkedin.com/in/khaya-manoto/" target="_blank" class="social-link"><i class="fab fa-linkedin-in"></i></a>
                 <a href="https://github.com/Mackay89" target="_blank" class="social-link"><i class="fab fa-github"></i></a>
-                <a href="mailto:manotomackay@gmail.com" class="social-link"><i class="fas fa-envelope"></i></a>
+                <a href="mailto:kmmanoto@gmail.com" class="social-link"><i class="fas fa-envelope"></i></a>
             </div>
         </div>
         <div class="copyright">
@@ -666,6 +755,66 @@
 </div>
 
 <script>
+// ══════════════════════════════════════════════════
+//  ADMIN PASSWORD — change this to your own secret
+// ══════════════════════════════════════════════════
+const ADMIN_PASSWORD = 'KhayaSecure2026!';
+// ══════════════════════════════════════════════════
+
+let isAdmin = false;
+
+// ── Admin login / logout ──
+function openAdminLogin() {
+    if (isAdmin) { logoutAdmin(); return; }
+    document.getElementById('adminLoginOverlay').classList.add('active');
+    document.getElementById('adminPasswordInput').value = '';
+    document.getElementById('adminErrorMsg').textContent = '';
+    setTimeout(() => document.getElementById('adminPasswordInput').focus(), 100);
+}
+window.openAdminLogin = openAdminLogin;
+
+function closeAdminLogin() {
+    document.getElementById('adminLoginOverlay').classList.remove('active');
+}
+window.closeAdminLogin = closeAdminLogin;
+
+function attemptAdminLogin() {
+    const input = document.getElementById('adminPasswordInput');
+    const errMsg = document.getElementById('adminErrorMsg');
+    if (input.value === ADMIN_PASSWORD) {
+        isAdmin = true;
+        document.body.classList.add('admin-mode');
+        // Show admin-only elements
+        document.querySelectorAll('.admin-only').forEach(el => {
+            el.style.removeProperty('display');
+            el.style.display = 'flex';
+        });
+        closeAdminLogin();
+        showToast('Admin mode unlocked ✓', '#00d4aa');
+        document.getElementById('adminLockIcon').className = 'fas fa-lock-open';
+        document.getElementById('adminLockLabel').textContent = 'Admin ✓';
+        loadProjects(); // Reload with edit buttons visible
+    } else {
+        input.classList.add('error');
+        errMsg.textContent = 'Incorrect password. Try again.';
+        input.value = '';
+        setTimeout(() => input.classList.remove('error'), 600);
+    }
+}
+window.attemptAdminLogin = attemptAdminLogin;
+
+function logoutAdmin() {
+    isAdmin = false;
+    document.body.classList.remove('admin-mode');
+    document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
+    document.getElementById('adminLockIcon').className = 'fas fa-lock';
+    document.getElementById('adminLockLabel').textContent = 'Admin';
+    showToast('Admin mode locked', '#fbbf24');
+    // Exit edit mode if active
+    if (editMode) cancelEdits();
+    loadProjects();
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('currentYear').textContent = new Date().getFullYear();
 
@@ -677,6 +826,7 @@ document.addEventListener('DOMContentLoaded', function () {
         t.classList.add('show');
         setTimeout(() => t.classList.remove('show'), 3000);
     }
+    window.showToast = showToast;
 
     // ── Mobile menu ──
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
@@ -694,8 +844,15 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // ── PHOTO UPLOAD ──
+    // ── PHOTO UPLOAD (admin only) ──
+    // Make profile container clickable only for admin
+    document.querySelector('.profile-img-container').addEventListener('click', function(e) {
+        if (!isAdmin) return; // visitors cannot change photo
+        document.getElementById('photoInput').click();
+    });
+
     function handlePhotoUpload(event) {
+        if (!isAdmin) return;
         const file = event.target.files[0];
         if (!file) return;
         const reader = new FileReader();
@@ -705,13 +862,13 @@ document.addEventListener('DOMContentLoaded', function () {
             img.src = e.target.result;
             img.style.display = 'block';
             fallback.style.display = 'none';
-            // Store in localStorage so it persists on page refresh
             try { localStorage.setItem('km_profile_photo', e.target.result); } catch(err) {}
             showToast('Profile photo updated! ✓', '#00d4aa');
         };
         reader.readAsDataURL(file);
     }
     window.handlePhotoUpload = handlePhotoUpload;
+    document.getElementById('photoInput').addEventListener('change', handlePhotoUpload);
 
     // ── Load saved photo ──
     try {
@@ -729,26 +886,33 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('profilePhoto').dispatchEvent(new Event('error'));
     }
 
-    // ── EDIT MODE (inline text editing) ──
-    let editMode = false;
+    // Show upload hint only for admin
+    const uploadOverlay = document.querySelector('.photo-upload-overlay');
+    document.querySelector('.profile-img-container').addEventListener('mouseenter', () => {
+        if (isAdmin) uploadOverlay.style.opacity = '1';
+    });
+    document.querySelector('.profile-img-container').addEventListener('mouseleave', () => {
+        uploadOverlay.style.opacity = '0';
+    });
+
+    // ── EDIT MODE (admin only) ──
+    window.editMode = false;
     const editableIds = ['heroTagline', 'heroName', 'heroBio'];
 
     function toggleEditMode() {
-        editMode = !editMode;
-        const bar = document.getElementById('editModeBar');
+        if (!isAdmin) return;
+        window.editMode = !window.editMode;
+        const bar = document.getElementById('editModeBarAdmin');
         const btn = document.getElementById('editHeroBtn');
-        if (editMode) {
-            bar.classList.add('active');
+        if (window.editMode) {
+            bar.style.display = 'flex';
             btn.innerHTML = '<i class="fas fa-eye"></i> Previewing';
             editableIds.forEach(id => {
                 const el = document.getElementById(id);
-                if (el) {
-                    el.setAttribute('contenteditable', 'true');
-                    el.dataset.original = el.textContent;
-                }
+                if (el) { el.setAttribute('contenteditable', 'true'); el.dataset.original = el.textContent; }
             });
         } else {
-            bar.classList.remove('active');
+            bar.style.display = 'none';
             btn.innerHTML = '<i class="fas fa-pen"></i> Edit Bio';
             editableIds.forEach(id => {
                 const el = document.getElementById(id);
@@ -759,6 +923,7 @@ document.addEventListener('DOMContentLoaded', function () {
     window.toggleEditMode = toggleEditMode;
 
     function saveEdits() {
+        if (!isAdmin) return;
         try {
             const data = {};
             editableIds.forEach(id => {
@@ -768,7 +933,7 @@ document.addEventListener('DOMContentLoaded', function () {
             localStorage.setItem('km_bio_data', JSON.stringify(data));
         } catch(e) {}
         toggleEditMode();
-        showToast('Changes saved! ✓', '#00d4aa');
+        showToast('Bio saved! ✓', '#00d4aa');
     }
     window.saveEdits = saveEdits;
 
@@ -777,7 +942,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const el = document.getElementById(id);
             if (el && el.dataset.original) el.textContent = el.dataset.original;
         });
-        toggleEditMode();
+        if (window.editMode) toggleEditMode();
     }
     window.cancelEdits = cancelEdits;
 
@@ -814,6 +979,13 @@ document.addEventListener('DOMContentLoaded', function () {
         projects.forEach(project => {
             const card = document.createElement('div');
             card.className = 'project-card';
+            // Only show Edit/Remove buttons when admin is logged in
+            const adminButtons = isAdmin ? `
+                <div class="project-actions-bottom">
+                    <button class="btn btn-edit edit-project-btn" data-id="${project.id}"><i class="fas fa-pen"></i> Edit</button>
+                    <button class="btn btn-danger remove-project-btn" data-id="${project.id}"><i class="fas fa-trash-alt"></i> Remove</button>
+                </div>` : '';
+
             card.innerHTML = `
                 <img src="${project.image || 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'}" alt="${project.title}" class="project-img">
                 <div class="project-content">
@@ -828,10 +1000,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 ${project.github ? `<a href="${project.github}" target="_blank" class="btn btn-outline"><i class="fab fa-github"></i> Code</a>` : ''}
                             </div>
                         </div>
-                        <div class="project-actions-bottom">
-                            <button class="btn btn-edit edit-project-btn" data-id="${project.id}"><i class="fas fa-pen"></i> Edit</button>
-                            <button class="btn btn-danger remove-project-btn" data-id="${project.id}"><i class="fas fa-trash-alt"></i> Remove</button>
-                        </div>
+                        ${adminButtons}
                     </div>
                 </div>
             `;
@@ -839,13 +1008,15 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         document.querySelectorAll('.view-project-btn').forEach(btn => btn.addEventListener('click', function() { openViewModal(parseInt(this.dataset.id)); }));
-        document.querySelectorAll('.edit-project-btn').forEach(btn => btn.addEventListener('click', function() { openEditModal(parseInt(this.dataset.id)); }));
-        document.querySelectorAll('.remove-project-btn').forEach(btn => btn.addEventListener('click', function() {
-            pendingDeleteId = parseInt(this.dataset.id);
-            const proj = projects.find(p => p.id === pendingDeleteId);
-            document.getElementById('confirmMessage').textContent = `Remove "${proj ? proj.title : 'this project'}"? This cannot be undone.`;
-            confirmOverlay.classList.add('active');
-        }));
+        if (isAdmin) {
+            document.querySelectorAll('.edit-project-btn').forEach(btn => btn.addEventListener('click', function() { openEditModal(parseInt(this.dataset.id)); }));
+            document.querySelectorAll('.remove-project-btn').forEach(btn => btn.addEventListener('click', function() {
+                pendingDeleteId = parseInt(this.dataset.id);
+                const proj = projects.find(p => p.id === pendingDeleteId);
+                document.getElementById('confirmMessage').textContent = `Remove "${proj ? proj.title : 'this project'}"? This cannot be undone.`;
+                confirmOverlay.classList.add('active');
+            }));
+        }
     }
 
     function openViewModal(id) {
@@ -868,6 +1039,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function openEditModal(id) {
+        if (!isAdmin) return;
         const project = projects.find(p => p.id === id);
         if (!project) return;
         projectFormTitle.textContent = 'Edit Project';
@@ -899,9 +1071,11 @@ document.addEventListener('DOMContentLoaded', function () {
     window.addEventListener('click', (e) => {
         if (e.target === projectModal) closeModal(projectModal);
         if (e.target === addProjectModal) { closeModal(addProjectModal); resetAddForm(); }
+        if (e.target === document.getElementById('adminLoginOverlay')) closeAdminLogin();
     });
 
     document.getElementById('addProjectBtn').addEventListener('click', () => {
+        if (!isAdmin) return;
         resetAddForm();
         addProjectModal.classList.add('active');
         document.body.style.overflow = 'hidden';
@@ -909,6 +1083,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     addProjectForm.addEventListener('submit', function(e) {
         e.preventDefault();
+        if (!isAdmin) return;
         const editId = parseInt(document.getElementById('editProjectId').value);
         const data = {
             title: document.getElementById('projectTitle').value,
@@ -932,6 +1107,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     document.getElementById('confirmDeleteBtn').addEventListener('click', () => {
+        if (!isAdmin) { confirmOverlay.classList.remove('active'); return; }
         if (pendingDeleteId !== null) {
             projects = projects.filter(p => p.id !== pendingDeleteId);
             pendingDeleteId = null;
@@ -948,7 +1124,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById('contactForm').addEventListener('submit', function(e) {
         e.preventDefault();
-        showToast(`Message sent! I'll get back to you soon ✓`, '#00d4aa');
+        showToast("Message sent! I'll get back to you soon ✓", '#00d4aa');
         this.reset();
     });
 
